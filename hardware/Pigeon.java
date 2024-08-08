@@ -19,7 +19,6 @@ public class Pigeon implements Zensor, ZmartDash {
         this.zero.put("roll", 0.0);
     }
 
-    @Override
     public Pigeon init() {
         this.pigeon = new Pigeon2(this.can_id);
         return this;

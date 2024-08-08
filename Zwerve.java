@@ -94,7 +94,6 @@ public abstract class Zwerve extends SubsystemBase implements ZmartDash {
         for (Module i : this.module) {
             i.init();
         }
-        this.gyro.init();
         return this.opt_init();
     }
 
