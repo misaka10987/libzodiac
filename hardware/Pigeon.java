@@ -17,6 +17,7 @@ public class Pigeon implements Zensor, ZmartDash {
         this.zero.put("yaw", 0.0);
         this.zero.put("pitch", 0.0);
         this.zero.put("roll", 0.0);
+        this.init();
     }
 
     public Pigeon init() {

@@ -18,7 +18,7 @@ public abstract class ZMotor {
     /**
      * Motions profiles pre-defined for future use.
      */
-    public HashMap<String, Double> profile;
+    public HashMap<String, Double> profile = new HashMap<>();
 
     /**
      * Initialize this motor, e.g. binds to the CAN bus.

@@ -66,6 +66,11 @@ public class TalonSRXMotor extends ZMotor {
             super(can_id);
         }
 
+        public Zervo reset() {
+            this.motor.setSelectedSensorPosition(0);
+            return this;
+        }
+
         @Override
         public Zervo set_zero(double zero) {
             this.zero = zero;

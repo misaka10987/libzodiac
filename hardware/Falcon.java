@@ -57,7 +57,7 @@ public class Falcon extends ZMotor implements ZmartDash {
 
     @Override
     public Falcon go(String profile) {
-        this.motor.setControl(new VelocityDutyCycle(this.profile.get(profile)));
+        this.motor.set(this.profile.get(profile));
         return this;
     }
 
