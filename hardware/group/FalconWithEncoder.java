@@ -95,12 +95,12 @@ public class FalconWithEncoder extends ZMotor implements Zervo, ZmartDash {
 
     public boolean reset(boolean reverse) {
         var curr = this.getPosition() / Constant.SWERVE_MOTOR_WHEEL_RATIO;
-        double delta = -Util.mod_pi(curr);
+        double delta = Util.mod_pi(-curr);
         if (Math.abs(delta) > Math.PI / 2) {
-            delta = Util.mod_pi(delta + Math.PI);
+            delta = Util.mod_pi(delta);
             reverse = !reverse;
         }
-        double target = curr + delta;
+        double target = curr;
         this.go(target * Constant.SWERVE_MOTOR_WHEEL_RATIO);
         return reverse;
     }
@@ -108,7 +108,7 @@ public class FalconWithEncoder extends ZMotor implements Zervo, ZmartDash {
     public double getPosition() {
         // Why not this.zero? Because idk what this.zero actually is. It just doesn't work.
         return this.motor.getPosition().refresh().getValue();
-        //return this.encoder.get();
+        // return this.encoder.get_rad();
     }
 
     public Zervo clear() {

@@ -5,7 +5,7 @@ public final class Constant {
     /**
      * How many radians a raw <code>TalonSRX</code>'s unit is equal to.
      */
-    public static final double TALONSRX_ENCODER_UNIT = 1/(2 * Math.PI / 4096); //maybe test later
+    public static final double TALONSRX_ENCODER_UNIT = 1 / (2 * Math.PI / 4096); //maybe test later
 
     /**
      * Falcon uses rotation as its position unit.

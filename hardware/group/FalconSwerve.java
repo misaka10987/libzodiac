@@ -52,7 +52,7 @@ public final class FalconSwerve implements Module, ZmartDash {
         final var target = curr + delta;
         this.debug("target", target);
         this.angle_motor.go(target * Constant.SWERVE_MOTOR_WHEEL_RATIO);
-        this.speed_motor.go(speed);
+        this.speed_motor.set(speed);
         return this;
     }
 

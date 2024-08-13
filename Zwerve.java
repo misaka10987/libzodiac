@@ -209,10 +209,10 @@ public abstract class Zwerve extends SubsystemBase implements ZmartDash {
 
     public ZCommand check_wheel_reset(Zoystick zoystick) {
         return new Zambda<>((x) -> {
-            if (zoystick.pressed("A")) {
+            if (zoystick.pressed("B")) {
                 this.reset();
             }
-            if (zoystick.pressed("Y")) {
+            if (zoystick.pressed("A")) {
                 this.module[0].clear();
                 this.module[1].clear();
                 this.module[2].clear();

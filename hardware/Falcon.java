@@ -68,6 +68,11 @@ public class Falcon extends ZMotor implements ZmartDash {
         return this;
     }
 
+    public Falcon set(double x) {
+        this.motor.set(x);
+        return this;
+    }
+
     @Override
     public String key() {
         return "Falcon(" + this.can_id + ")";
