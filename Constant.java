@@ -12,6 +12,5 @@ public final class Constant {
      */
     public static final double FALCON_POSITION_UNIT = 2 * Math.PI;
 
-    public static final double SWERVE_MOTOR_WHEEL_RATIO = 4;
-    //i guess it was 4. calculate the real one later
+    public static final double SWERVE_STEER_RATIO = 4;
 }

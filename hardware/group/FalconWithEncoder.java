@@ -94,14 +94,14 @@ public class FalconWithEncoder extends ZMotor implements Zervo, ZmartDash {
     }
 
     public boolean reset(boolean reverse) {
-        var curr = this.getPosition() / Constant.SWERVE_MOTOR_WHEEL_RATIO;
+        var curr = this.getPosition() / Constant.SWERVE_STEER_RATIO;
         double delta = Util.mod_pi(-curr);
         if (Math.abs(delta) > Math.PI / 2) {
             delta = Util.mod_pi(delta);
             reverse = !reverse;
         }
         double target = curr;
-        this.go(target * Constant.SWERVE_MOTOR_WHEEL_RATIO);
+        this.go(target * Constant.SWERVE_STEER_RATIO);
         return reverse;
     }
 

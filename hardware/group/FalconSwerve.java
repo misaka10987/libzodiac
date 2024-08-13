@@ -39,7 +39,7 @@ public final class FalconSwerve implements Module, ZmartDash {
             angle = Util.mod_pi(angle + Math.PI);
             speed = -speed;
         }
-        final var curr = this.angle_motor.getPosition() / Constant.SWERVE_MOTOR_WHEEL_RATIO;
+        final var curr = this.angle_motor.getPosition() / Constant.SWERVE_STEER_RATIO;
         var delta = Util.mod_pi(angle - curr);
         if (Math.abs(delta) > Math.PI / 2) {
             angle = Util.mod_pi(angle + Math.PI);
@@ -51,7 +51,7 @@ public final class FalconSwerve implements Module, ZmartDash {
         this.debug("delta", delta);
         final var target = curr + delta;
         this.debug("target", target);
-        this.angle_motor.go(target * Constant.SWERVE_MOTOR_WHEEL_RATIO);
+        this.angle_motor.go(target * Constant.SWERVE_STEER_RATIO);
         this.speed_motor.set(speed);
         return this;
     }
