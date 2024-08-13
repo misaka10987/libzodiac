@@ -2,23 +2,30 @@ package frc.libzodiac;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-import java.util.function.Consumer;
-
 /**
  * Allows you to construct wpilib's <code>Command</code> with a lambda.
  */
-public class Zambda<T extends Subsystem> extends ZCommand {
-    public final T src;
-    public final Consumer<T> exec;
+public final class Zambda extends ZCommand {
+    public final Runnable exec;
 
-    public Zambda(Consumer<T> exec, T src) {
+    public Zambda(Subsystem req, Runnable exec) {
         this.exec = exec;
-        this.src = this.require(src);
+        this.require(req);
+    }
+
+    public Zambda(Subsystem[] req, Runnable exec) {
+        this.exec = exec;
+        for (final var i : req)
+            this.require(i);
+    }
+
+    public static Zambda indep(Runnable exec) {
+        return new Zambda(new Subsystem[] {}, exec);
     }
 
     @Override
     protected ZCommand exec() {
-        this.exec.accept(this.src);
+        this.exec.run();
         return this;
     }
 }

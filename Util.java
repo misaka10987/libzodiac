@@ -1,6 +1,5 @@
 package frc.libzodiac;
 
-
 import edu.wpi.first.wpilibj.Timer;
 
 /**
@@ -9,7 +8,8 @@ import edu.wpi.first.wpilibj.Timer;
 public class Util {
     public static void blocking_wait(int ms) {
         final var t = new Timer();
-        while (t.get() < ((double) ms) / 1000) ;
+        while (t.get() < ((double) ms) / 1000)
+            ;
     }
 
     /**
@@ -37,7 +37,8 @@ public class Util {
      */
     public static double mod(Double num, double mod) {
         // I believe there are still some bugs.
-        if (num.isInfinite() || num.isNaN()) return Double.NaN;
+        if (num.isInfinite() || num.isNaN())
+            return Double.NaN;
         if (num < 0) {
             return -mod(-num, mod);
         }

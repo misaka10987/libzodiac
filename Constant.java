@@ -7,11 +7,6 @@ public final class Constant {
      */
     public static final double TALONSRX_ENCODER_UNIT = 1/(2 * Math.PI / 4096); //maybe test later
 
-    /**
-     * Falcon uses rotation as its position unit.
-     */
-    public static final double FALCON_POSITION_UNIT = 2 * Math.PI;
-
     public static final double SWERVE_MOTOR_WHEEL_RATIO = 4;
     //i guess it was 4. calculate the real one later
 }
