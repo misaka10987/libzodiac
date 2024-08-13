@@ -4,6 +4,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.StaticBrake;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.libzodiac.Constant;
 import frc.libzodiac.ZMotor;
@@ -56,13 +57,14 @@ public class Falcon extends ZMotor implements ZmartDash {
 
     @Override
     public Falcon go(String profile) {
-        this.motor.set(this.profile.get(profile));
-        return this;
+        final var v = this.profile.get(profile);
+        return this.go(v);
     }
 
     @Override
-    public Falcon go(double raw_unit) {
-        this.motor.set(raw_unit);
+    public Falcon go(double rad_s) {
+        final var v = new VelocityDutyCycle(rad_s);
+        this.motor.setControl(v);
         return this;
     }
 
