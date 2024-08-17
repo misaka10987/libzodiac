@@ -99,6 +99,14 @@ public class Util {
         return x -> Math.abs(x) < thre ? 0 : x;
     }
 
+    public static boolean approx(double x_1, double x_2, double thre) {
+        return Math.abs(x_1 - x_2) < thre;
+    }
+
+    public static boolean approx(double x_1, double x_2) {
+        return approx(x_1, x_2, 1e-3);
+    }
+
     public static Tuple2<Double, Boolean> solve(double src, double dst) {
         // var mod_pied = mod_pi(src);
         // var delta = mod_pi(dst - mod_pied);

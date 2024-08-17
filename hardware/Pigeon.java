@@ -1,6 +1,8 @@
 package frc.libzodiac.hardware;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+
+import frc.libzodiac.Util;
 import frc.libzodiac.Zensor;
 import frc.libzodiac.ZmartDash;
 
@@ -38,9 +40,9 @@ public class Pigeon implements Zensor, ZmartDash {
     @Override
     public double get(String value) {
         return switch (value.trim().toLowerCase()) {
-            case "yaw" -> this.pigeon.getYaw().getValue();
-            case "pitch" -> this.pigeon.getPitch().getValue();
-            case "roll" -> this.pigeon.getRoll().getValue();
+            case "yaw" -> Util.rad(this.pigeon.getYaw().getValue());
+            case "pitch" -> Util.rad(this.pigeon.getPitch().getValue());
+            case "roll" -> Util.rad(this.pigeon.getRoll().getValue());
             default -> throw new InvalidParameterException(value);
         };
     }

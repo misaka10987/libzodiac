@@ -4,17 +4,19 @@ import frc.libzodiac.Util;
 import frc.libzodiac.ZmartDash;
 import frc.libzodiac.Zwerve.Module;
 import frc.libzodiac.hardware.Falcon;
+import frc.libzodiac.hardware.MagEncoder;
 import frc.libzodiac.util.Vec2D;
 
 public final class FalconSwerve implements Module, ZmartDash {
     public final Falcon speed_motor;
     public final Falcon.Servo angle_motor;
 
-    private double zero_pos = 0;
+    private MagEncoder encoder;
 
-    public FalconSwerve(Falcon speed_motor, Falcon.Servo angle_motor) {
+    public FalconSwerve(Falcon speed_motor, Falcon.Servo angle_motor, MagEncoder encoder) {
         this.speed_motor = speed_motor;
         this.angle_motor = angle_motor;
+        this.encoder = encoder;
     }
 
     private static final double SWERVE_RATIO = 150.0 / 7.0;
@@ -23,25 +25,28 @@ public final class FalconSwerve implements Module, ZmartDash {
     public FalconSwerve init() {
         this.speed_motor.init();
         this.angle_motor.init();
-        this.reset();
+        this.encoder.init();
+        this.debug("encoder_zero", this.encoder.zero);
         return this;
     }
 
     @Override
     public FalconSwerve reset() {
-        this.zero_pos = this.angle_motor.get() / SWERVE_RATIO;
+        final var curr = this.encoder.get();
+        final var target = curr * SWERVE_RATIO;
+        this.angle_motor.set_zero(target);
         return this;
     }
 
     @Override
     public FalconSwerve go(Vec2D vel) {
-        // 轮子转一圈 falcon 转25圈
+        // 轮子转一圈 falcon 转150/7圈
         if (vel.r() == 0) {
             this.speed_motor.shutdown();
+            this.angle_motor.shutdown();
             return this;
         }
-        this.debug("go", "" + vel);
-        final var curr = this.angle_motor.get() / SWERVE_RATIO - this.zero_pos;
+        final var curr = this.angle_motor.get() / SWERVE_RATIO;
         final var angle = vel.theta();
         final var best = Util.solve(curr, angle);
 
@@ -49,12 +54,8 @@ public final class FalconSwerve implements Module, ZmartDash {
         final var inverted = best.x1;
 
         final var speed = inverted ? -vel.r() : vel.r();
-        this.angle_motor.debug("curr", curr);
-        this.angle_motor.debug("go", pos);
-        this.speed_motor.debug("go", speed);
-        this.angle_motor.debug("dst", pos * SWERVE_RATIO);
         this.speed_motor.go_v(speed);
-        this.angle_motor.go((pos + this.zero_pos) * SWERVE_RATIO);
+        this.angle_motor.go(pos * SWERVE_RATIO);
         return this;
     }
 

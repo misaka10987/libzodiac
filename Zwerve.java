@@ -1,5 +1,6 @@
 package frc.libzodiac;
 
+import java.util.ArrayDeque;
 import frc.libzodiac.ui.Axis;
 import frc.libzodiac.util.Vec2D;
 
@@ -63,6 +64,11 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         this.module = modules;
         this.gyro = gyro;
         this.shape = shape;
+        final var v = new Vec2D(0, 0);
+        this.prev.add(v);
+        this.prev.add(v);
+        this.prev.add(v);
+        this.prev.add(v);
     }
 
     /**
@@ -95,13 +101,21 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         for (Module i : this.module) {
             i.init();
         }
-        return this.opt_init();
+        this.opt_init();
+        this.desired_yaw = this.gyro.get("yaw");
+        return this;
     }
 
     /**
      * Optional initializations you would like to automatically invoke.
      */
     protected abstract Zwerve opt_init();
+
+    private ArrayDeque<Vec2D> prev = new ArrayDeque<>();
+
+    private double desired_yaw = 0;
+
+    private static double POS_FIX_KP = 5;
 
     /**
      * Kinematics part rewritten using vector calculations.
@@ -110,9 +124,23 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * @param rot rotal velocity, CCW positive
      */
     public Zwerve go(Vec2D vel, double rot) {
-        if (vel.r() < 0.4)
-            return this;
-        this.debug("translation", "" + vel);
+        // final var curr_yaw = this.gyro.get("yaw");
+        // if (rot != 0) {
+        //     this.desired_yaw = curr_yaw;
+        // } else if (!Util.approx(this.desired_yaw, curr_yaw, 0.1)) {
+        //     final var error = this.desired_yaw - curr_yaw;
+        //     this.debug("yaw_error", error);
+        //     rot += error * POS_FIX_KP;
+        // }
+        // if (vel.r() < 0.05)
+        // return this.go(vel, rot);
+        this.prev.add(vel);
+        var sum = new Vec2D(0, 0);
+        for (final var i : this.prev)
+            sum = sum.add(i);
+        final var vt = sum.div(this.prev.size());
+        this.prev.pop();
+        this.debug("translation", "" + vt);
         this.debug("rotation", rot);
         final var l = this.shape.x / 2;
         final var w = this.shape.y / 2;
@@ -123,7 +151,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
                 new Vec2D(l, -w),
         };
         for (var i = 0; i < 4; i++)
-            v[i] = v[i].rot(Math.PI / 2).with_r(rot).add(vel);
+            v[i] = v[i].rot(Math.PI / 2).with_r(rot).add(vt);
         for (int i = 0; i < 4; i++)
             this.module[i].go(v[i].mul(this.output));
         return this;

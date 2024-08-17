@@ -101,10 +101,7 @@ public class Falcon extends ZMotor implements ZmartDash {
 
         public static final double POSITION_RAW_UNIT = 2 * Math.PI;
 
-        /**
-         * Zero position applied to adjust output value of Falcon's builtin encoder.
-         */
-        public double zero = 0;
+        // private double zero = 0;
 
         public Servo(int can_id) {
             super(can_id);
@@ -125,13 +122,16 @@ public class Falcon extends ZMotor implements ZmartDash {
 
         @Override
         public Servo set_zero(double zero) {
-            this.zero = zero;
+            // this.zero = zero;
+            final var v = zero / POSITION_RAW_UNIT;
+            this.motor.setPosition(this.inverted ? -v : v);
             return this;
         }
 
         @Override
         public double get_zero() {
-            return this.zero;
+            // return this.zero;
+            return 0;
         }
 
         @Override
@@ -160,6 +160,5 @@ public class Falcon extends ZMotor implements ZmartDash {
         public String key() {
             return "Falcon.Servo(" + this.can_id + ")";
         }
-
     }
 }

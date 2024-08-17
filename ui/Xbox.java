@@ -2,7 +2,6 @@ package frc.libzodiac.ui;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import frc.libzodiac.Util;
 
 public final class Xbox {
     public final int port;
@@ -35,6 +34,34 @@ public final class Xbox {
 
     public Axis rt() {
         return new Axis(() -> this.xbox.getRightTriggerAxis());
+    }
+
+    public Button lb() {
+        return new Button(() -> this.xbox.getLeftBumper());
+    }
+
+    public Button rb() {
+        return new Button(() -> this.xbox.getRightBumper());
+    }
+
+    public Button up_pov() {
+        final var pov = this.xbox.getPOV();
+        return new Button(() -> pov < 45 || pov >= 315);
+    }
+
+    public Button right_pov() {
+        final var pov = this.xbox.getPOV();
+        return new Button(() -> pov >= 45 && pov < 135);
+    }
+
+    public Button down_pov() {
+        final var pov = this.xbox.getPOV();
+        return new Button(() -> pov >= 135 && pov < 225);
+    }
+
+    public Button left_pov() {
+        final var pov = this.xbox.getPOV();
+        return new Button(() -> pov >= 225 && pov < 315);
     }
 
     public Button a() {
