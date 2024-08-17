@@ -63,8 +63,9 @@ public class Pro775 extends ZMotor {
     }
 
     @Override
-    public ZMotor raw(double output) {
+    public Pro775 raw(double output) {
         this.motor.set(ControlMode.PercentOutput, output);
+        return this;
     }
 
     public static class Servo extends Pro775 implements Zervo {
