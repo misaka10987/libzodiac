@@ -1,12 +1,12 @@
 package frc.libzodiac;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.libzodiac.ui.Axis;
 import frc.libzodiac.util.Vec2D;
 
 /**
  * A highly implemented class for hopefully all types of swerve control.
  */
-public abstract class Zwerve extends SubsystemBase implements ZmartDash {
+public abstract class Zwerve extends Zubsystem implements ZmartDash {
 
     public final Vec2D shape;
     /**
@@ -56,7 +56,8 @@ public abstract class Zwerve extends SubsystemBase implements ZmartDash {
      *
      * @param modules See <code>Zwerve.module</code>.
      * @param gyro    The gyro.
-     * @param shape   Shape of the robot, <code>x</code> for length and <code>y</code> for width.
+     * @param shape   Shape of the robot, <code>x</code> for length and
+     *                <code>y</code> for width.
      */
     public Zwerve(Module[] modules, Zensor gyro, Vec2D shape) {
         this.module = modules;
@@ -103,70 +104,43 @@ public abstract class Zwerve extends SubsystemBase implements ZmartDash {
     protected abstract Zwerve opt_init();
 
     /**
-     * Kinematics part from 6941.
-     */
-    @Deprecated
-    public Zwerve go_previous(Vec2D velocity, double omega) {
-        var x = velocity.x;
-        var y = velocity.y;
-        var l = this.shape.x;
-        var w = this.shape.y;
-        var r = this.radius();
-        var a = y - omega * l / r;
-        var b = y + omega * l / r;
-        var c = x - omega * w / r;
-        var d = x + omega * w / r;
-        var v1 = new Vec2D.Polar(Math.hypot(b, c), Math.atan2(b, c));
-        var v2 = new Vec2D.Polar(Math.hypot(b, d), Math.atan2(b, d));
-        var v3 = new Vec2D.Polar(Math.hypot(a, d), Math.atan2(a, d));
-        var v4 = new Vec2D.Polar(Math.hypot(a, c), Math.atan2(a, c));
-        var max = Math.max(Math.max(v1.r, v2.r), Math.max(v3.r, v4.r));
-        if (max > 1) {
-            v1 = v1.div(max);
-            v2 = v2.div(max);
-            v3 = v3.div(max);
-            v4 = v4.div(max);
-        }
-        this.module[0].go(v2.into());
-        this.module[1].go(v3.into());
-        this.module[2].go(v4.into());
-        this.module[3].go(v1.into());
-        return this;
-    }
-
-    /**
      * Kinematics part rewritten using vector calculations.
+     * 
+     * @param vel translational velocity, with +x as the head of the bot
+     * @param rot rotal velocity, CCW positive
      */
-    public Zwerve go(Vec2D velocity, double omega) {
+    public Zwerve go(Vec2D vel, double rot) {
+        if (vel.r() < 0.4)
+            return this;
+        this.debug("translation", "" + vel);
+        this.debug("rotation", rot);
         final var l = this.shape.x / 2;
         final var w = this.shape.y / 2;
-        final var vt = omega;
-        final var vel = velocity.rot(this.dir_fix());
         Vec2D[] v = {
-                new Vec2D(-l, -w).with_r(vt).add(vel),
-                new Vec2D(l, -w).with_r(vt).add(vel),
-                new Vec2D(l, w).with_r(vt).add(vel),
-                new Vec2D(-l, w).with_r(vt).add(vel),
+                new Vec2D(l, w),
+                new Vec2D(-l, w),
+                new Vec2D(-l, -w),
+                new Vec2D(l, -w),
         };
-        final var max = v[0].max(v[1]).max(v[2]).max(v[3]).r();
-        if (max > 1) for (int i = 0; i < 4; i++) v[i] = v[i].div(max);
-        this.module[0].go(v[0].mul(output));
-        this.module[1].go(v[1].mul(output));
-        this.module[2].go(v[2].mul(output));
-        this.module[3].go(v[3].mul(output));
+        for (var i = 0; i < 4; i++)
+            v[i] = v[i].rot(Math.PI / 2).with_r(rot).add(vel);
+        for (int i = 0; i < 4; i++)
+            this.module[i].go(v[i].mul(this.output));
         return this;
     }
 
     @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
+    public Zwerve update() {
         this.debug("headless", this.headless);
         this.debug("dir_fix", this.dir_fix());
         this.debug("yaw", this.gyro.get("yaw"));
+        return this;
     }
 
     /**
      * Enable/disable headless mode.
+     * 
+     * @param status whether to enable headless mode
      */
     public Zwerve headless(boolean status) {
         this.headless = status;
@@ -186,62 +160,25 @@ public abstract class Zwerve extends SubsystemBase implements ZmartDash {
     }
 
     public ZCommand drive_forward() {
-        return new Zambda<>((x) -> x.go(new Vec2D(0.1, 0), 0), this);
+        return new Zambda(this, () -> this.go(new Vec2D(0.1, 0), 0));
     }
 
-    public ZCommand drive(Zoystick zoystick) {
-        return new Zambda<>((x) -> {
-            final var vel = new Vec2D(-zoystick.ly(), -zoystick.lx());
-            this.debug("vel", vel + "");
-            this.debug("rot", zoystick.rx());
-            x.go(vel, zoystick.rx());
-        }, this);
-    }
-
-    public ZCommand check_headless(Zoystick zoystick) {
-        return new Zambda<>((x) -> {
-            if (zoystick.pressed("X")) {
-                this.headless();
-            }
-            this.debug("x", zoystick.button("X"));
-        }, this);
-    }
-
-    public ZCommand check_wheel_reset(Zoystick zoystick) {
-        return new Zambda<>((x) -> {
-            if (zoystick.pressed("B")) {
-                this.reset();
-            }
-            if (zoystick.pressed("A")) {
-                this.module[0].clear();
-                this.module[1].clear();
-                this.module[2].clear();
-                this.module[3].clear();
-            }
-        }, this);
-    }
-
-    public Zwerve reset() {
-        this.module[0].reset();
-        this.module[1].reset();
-        this.module[2].reset();
-        this.module[3].reset();
-        this.gyro.reset();
-        return this;
-    }
-
-    public Zwerve clear() {
-        this.module[0].clear();
-        this.module[1].clear();
-        this.module[2].clear();
-        this.module[3].clear();
-        this.gyro.reset();
-        return this;
+    public ZCommand drive(Axis x, Axis y, Axis rot) {
+        return new Zambda(this, () -> {
+            final var vel = new Vec2D(x.get(), y.get());
+            this.go(vel, rot.get());
+        });
     }
 
     @Override
     public String key() {
         return "Zwerve";
+    }
+
+    public Zwerve mod_reset() {
+        for (final var i : this.module)
+            i.reset();
+        return this;
     }
 
     /**
@@ -254,7 +191,5 @@ public abstract class Zwerve extends SubsystemBase implements ZmartDash {
         Module go(Vec2D velocity);
 
         Module reset();
-
-        Module clear();
     }
 }

@@ -1,6 +1,5 @@
 package frc.libzodiac.hardware.group;
 
-import frc.libzodiac.Constant;
 import frc.libzodiac.Util;
 import frc.libzodiac.ZmartDash;
 import frc.libzodiac.Zwerve.Module;
@@ -9,62 +8,53 @@ import frc.libzodiac.util.Vec2D;
 
 public final class FalconSwerve implements Module, ZmartDash {
     public final Falcon speed_motor;
-    public final FalconWithEncoder angle_motor;
+    public final Falcon.Servo angle_motor;
 
-    public final Vec2D speed;
+    private double zero_pos = 0;
 
-    // Control the direction of speed motor.
-    private boolean speed_inverted = false;
-
-    public FalconSwerve(Falcon speed_motor, FalconWithEncoder angle_motor, Vec2D speed) {
+    public FalconSwerve(Falcon speed_motor, Falcon.Servo angle_motor) {
         this.speed_motor = speed_motor;
         this.angle_motor = angle_motor;
-        this.speed = speed;
     }
 
+    private static final double SWERVE_RATIO = 150.0 / 7.0;
+
     @Override
-    public Module init() {
+    public FalconSwerve init() {
         this.speed_motor.init();
         this.angle_motor.init();
+        this.reset();
         return this;
     }
 
     @Override
-    public Module go(Vec2D vel) {
-        final var v = vel.mul(this.speed);
-        this.debug("go", "" + v);
-        var angle = v.theta();
-        var speed = v.r();
-        if (this.speed_inverted) {
-            angle = Util.mod_pi(angle + Math.PI);
-            speed = -speed;
+    public FalconSwerve reset() {
+        this.zero_pos = this.angle_motor.get() / SWERVE_RATIO;
+        return this;
+    }
+
+    @Override
+    public FalconSwerve go(Vec2D vel) {
+        // 轮子转一圈 falcon 转25圈
+        if (vel.r() == 0) {
+            this.speed_motor.shutdown();
+            return this;
         }
-        final var curr = this.angle_motor.getPosition() / Constant.SWERVE_STEER_RATIO;
-        var delta = Util.mod_pi(angle - curr);
-        if (Math.abs(delta) > Math.PI / 2) {
-            angle = Util.mod_pi(angle + Math.PI);
-            delta = Util.mod_pi(angle - curr);
-            this.speed_inverted = !this.speed_inverted;
-            speed = -speed;
-        }
-        this.debug("curr", curr);
-        this.debug("delta", delta);
-        final var target = curr + delta;
-        this.debug("target", target);
-        this.angle_motor.go(target * Constant.SWERVE_STEER_RATIO);
-        this.speed_motor.set(speed);
-        return this;
-    }
+        this.debug("go", "" + vel);
+        final var curr = this.angle_motor.get() / SWERVE_RATIO - this.zero_pos;
+        final var angle = vel.theta();
+        final var best = Util.solve(curr, angle);
 
-    @Override
-    public Module reset() {
-        this.speed_inverted = this.angle_motor.reset(this.speed_inverted);
-        return this;
-    }
+        final var pos = best.x0;
+        final var inverted = best.x1;
 
-    @Override
-    public Module clear() {
-        this.angle_motor.clear();
+        final var speed = inverted ? -vel.r() : vel.r();
+        this.angle_motor.debug("curr", curr);
+        this.angle_motor.debug("go", pos);
+        this.speed_motor.debug("go", speed);
+        this.angle_motor.debug("dst", pos * SWERVE_RATIO);
+        this.speed_motor.go_v(speed);
+        this.angle_motor.go((pos + this.zero_pos) * SWERVE_RATIO);
         return this;
     }
 

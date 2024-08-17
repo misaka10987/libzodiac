@@ -20,6 +20,8 @@ public abstract class ZMotor {
      */
     public HashMap<String, Double> profile = new HashMap<>();
 
+    public boolean inverted = false;
+
     /**
      * Initialize this motor, e.g. binds to the CAN bus.
      */
@@ -45,7 +47,7 @@ public abstract class ZMotor {
     /**
      * Set PID parameters.
      */
-    public final ZMotor set_pid(PIDProfile pid) {
+    public ZMotor set_pid(PIDProfile pid) {
         this.pid = pid;
         return this;
     }
