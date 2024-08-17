@@ -81,4 +81,6 @@ public abstract class ZMotor {
      * @param rads rad/s for general motors and rad for servos.
      */
     public abstract ZMotor go(double rads);
+
+    public abstract ZMotor raw(double output);
 }
