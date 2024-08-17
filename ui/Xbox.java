@@ -1,6 +1,8 @@
 package frc.libzodiac.ui;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import frc.libzodiac.Util;
 
 public final class Xbox {
     public final int port;
@@ -49,6 +51,11 @@ public final class Xbox {
 
     public Button y() {
         return new Button(() -> this.xbox.getYButton());
+    }
+
+    public Xbox begin_rumble() {
+        this.xbox.setRumble(RumbleType.kBothRumble, 0.5);
+        return this;
     }
 
 }

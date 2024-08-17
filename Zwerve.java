@@ -110,22 +110,20 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * @param rot rotal velocity, CCW positive
      */
     public Zwerve go(Vec2D vel, double rot) {
+        if (vel.r() < 0.4)
+            return this;
         this.debug("translation", "" + vel);
         this.debug("rotation", rot);
         final var l = this.shape.x / 2;
         final var w = this.shape.y / 2;
         Vec2D[] v = {
-                new Vec2D(-l, -w).with_r(rot),
-                new Vec2D(l, -w).with_r(rot),
-                new Vec2D(l, w).with_r(rot),
-                new Vec2D(-l, w).with_r(rot),
+                new Vec2D(l, w),
+                new Vec2D(-l, w),
+                new Vec2D(-l, -w),
+                new Vec2D(l, -w),
         };
-        for (var i : v)
-            i = i.add(vel).rot(this.dir_fix());
-        final var max = v[0].max(v[1]).max(v[2]).max(v[3]).r();
-        if (max > 1)
-            for (int i = 0; i < 4; i++)
-                v[i] = v[i].div(max);
+        for (var i = 0; i < 4; i++)
+            v[i] = v[i].rot(Math.PI / 2).with_r(rot).add(vel);
         for (int i = 0; i < 4; i++)
             this.module[i].go(v[i].mul(this.output));
         return this;
@@ -177,6 +175,12 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         return "Zwerve";
     }
 
+    public Zwerve mod_reset() {
+        for (final var i : this.module)
+            i.reset();
+        return this;
+    }
+
     /**
      * Defines one swerve module.
      */
@@ -186,5 +190,6 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
 
         Module go(Vec2D velocity);
 
+        Module reset();
     }
 }

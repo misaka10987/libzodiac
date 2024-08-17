@@ -1,5 +1,9 @@
 package frc.libzodiac.util;
 
+import java.util.function.Function;
+
+import frc.libzodiac.Util;
+
 public class Vec2D {
 
     public final double x;
@@ -32,7 +36,9 @@ public class Vec2D {
 
     @Override
     public String toString() {
-        return "(" + this.x + "," + this.y + ")";
+        // final var x = String.format("%.3e", this.x);
+        // final var y = String.format("%.3e", this.y);
+        return "(" + Util.printed(this.x) + "," + Util.printed(this.y) + ")";
     }
 
     public Vec2D with_x(double x) {
@@ -100,6 +106,14 @@ public class Vec2D {
             return this;
         }
         return other;
+    }
+
+    public Vec2D map_x(Function<Double, Double> mapping) {
+        return this.with_x(mapping.apply(this.x));
+    }
+
+    public Vec2D map_y(Function<Double, Double> mapping) {
+        return this.with_y(mapping.apply(this.y));
     }
 
     public Polar into() {

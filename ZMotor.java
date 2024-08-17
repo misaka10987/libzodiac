@@ -20,6 +20,8 @@ public abstract class ZMotor {
      */
     public HashMap<String, Double> profile = new HashMap<>();
 
+    public boolean inverted = false;
+
     /**
      * Initialize this motor, e.g. binds to the CAN bus.
      */
