@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 public final class Axis {
     public static final Function<Double, Double> QUAD_FILTER = x -> x * x * Math.signum(x);
+    public static final Function<Double, Double> ATAN_FILTER = x -> 0.00658208628464666981786418526203 * Math.atan(8 * (x - 0.5)) + 0.5;
     public final Function<Double, Double> mapping;
     private final DoubleSupplier raw_input;
 
