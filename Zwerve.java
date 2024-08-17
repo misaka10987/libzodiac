@@ -1,6 +1,8 @@
 package frc.libzodiac;
 
 import java.util.ArrayDeque;
+
+import edu.wpi.first.wpilibj.Timer;
 import frc.libzodiac.ui.Axis;
 import frc.libzodiac.util.Vec2D;
 
@@ -115,7 +117,9 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
 
     private double desired_yaw = 0;
 
-    private static double POS_FIX_KP = 5;
+    private static double POS_FIX_KP = 1;
+
+    private Timer last_rot = new Timer();
 
     /**
      * Kinematics part rewritten using vector calculations.
@@ -124,16 +128,17 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * @param rot rotal velocity, CCW positive
      */
     public Zwerve go(Vec2D vel, double rot) {
-        // final var curr_yaw = this.gyro.get("yaw");
-        // if (rot != 0) {
-        //     this.desired_yaw = curr_yaw;
-        // } else if (!Util.approx(this.desired_yaw, curr_yaw, 0.1)) {
-        //     final var error = this.desired_yaw - curr_yaw;
-        //     this.debug("yaw_error", error);
-        //     rot += error * POS_FIX_KP;
-        // }
-        // if (vel.r() < 0.05)
-        // return this.go(vel, rot);
+
+        final var curr_yaw = this.gyro.get("yaw");
+        if (rot != 0) {
+            this.last_rot.reset();
+            this.desired_yaw = curr_yaw;
+        } else if (!Util.approx(this.desired_yaw, curr_yaw, 0.1) && this.last_rot.get() >= 1) {
+            final var error = this.desired_yaw - curr_yaw;
+            this.debug("yaw_error", error);
+            rot += error * POS_FIX_KP;
+        }
+
         this.prev.add(vel);
         var sum = new Vec2D(0, 0);
         for (final var i : this.prev)
@@ -219,5 +224,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         Module go(Vec2D velocity);
 
         Module reset();
+
+        Module shutdown();
     }
 }

@@ -60,6 +60,13 @@ public final class FalconSwerve implements Module, ZmartDash {
     }
 
     @Override
+    public FalconSwerve shutdown() {
+        this.angle_motor.shutdown();
+        this.speed_motor.shutdown();
+        return this;
+    }
+
+    @Override
     public String key() {
         return "FalconSwerve(" + this.speed_motor.key() + ",...)";
     }
