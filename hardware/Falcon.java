@@ -31,12 +31,7 @@ public class Falcon extends ZMotor implements ZmartDash {
 
     @Override
     public Falcon apply_pid() {
-        this.motor
-                .getConfigurator()
-                .apply(new Slot0Configs()
-                        .withKP(this.pid.k_p)
-                        .withKI(this.pid.k_i)
-                        .withKD(this.pid.k_d));
+        this.motor.getConfigurator().apply(new Slot0Configs().withKP(this.pid.k_p).withKI(this.pid.k_i).withKD(this.pid.k_d));
         return this;
     }
 
@@ -71,8 +66,9 @@ public class Falcon extends ZMotor implements ZmartDash {
         return this;
     }
 
-    public Falcon set(double x) {
-        this.motor.set(x);
+    @Override
+    public Falcon raw(double output) {
+        this.motor.set(output);
         return this;
     }
 
@@ -121,17 +117,17 @@ public class Falcon extends ZMotor implements ZmartDash {
         }
 
         @Override
+        public double get_zero() {
+            // return this.zero;
+            return 0;
+        }
+
+        @Override
         public Servo set_zero(double zero) {
             // this.zero = zero;
             final var v = zero / POSITION_RAW_UNIT;
             this.motor.setPosition(this.inverted ? -v : v);
             return this;
-        }
-
-        @Override
-        public double get_zero() {
-            // return this.zero;
-            return 0;
         }
 
         @Override
