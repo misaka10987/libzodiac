@@ -105,6 +105,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         }
         this.opt_init();
         this.desired_yaw = this.gyro.get("yaw");
+        this.last_rot.start();
         return this;
     }
 
@@ -128,22 +129,38 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * @param rot rotal velocity, CCW positive
      */
     public Zwerve go(Vec2D vel, double rot) {
+        this.debug("last_rot", this.last_rot.get());
 
+        // direction adjustment
         final var curr_yaw = this.gyro.get("yaw");
+        final var good = !Util.approx(this.desired_yaw, curr_yaw);
+        this.debug("good", good);
+        this.debug("desired", this.desired_yaw);
         if (rot != 0) {
             this.last_rot.reset();
             this.desired_yaw = curr_yaw;
-        } else if (!Util.approx(this.desired_yaw, curr_yaw, 0.1) && this.last_rot.get() >= 1) {
+        }
+
+        if (this.last_rot.get() < 0.5) {
+            this.desired_yaw = curr_yaw;
+        }
+
+        if (!Util.approx(this.desired_yaw, curr_yaw, 0.05)) {
+            this.debug("fix", "trying to fix");
             final var error = this.desired_yaw - curr_yaw;
             this.debug("yaw_error", error);
             rot += error * POS_FIX_KP;
         }
 
+        // if (Math.abs(rot) < 0.01)
+        // rot = 0;
+
         this.prev.add(vel);
         var sum = new Vec2D(0, 0);
         for (final var i : this.prev)
             sum = sum.add(i);
-        final var vt = sum.div(this.prev.size());
+        final var vt = sum.div(this.prev.size()).rot(this.dir_fix());
+
         this.prev.pop();
         this.debug("translation", "" + vt);
         this.debug("rotation", rot);
