@@ -40,7 +40,6 @@ public final class FalconSwerve implements Module, ZmartDash {
 
     @Override
     public FalconSwerve go(Vec2D vel) {
-        // 轮子转一圈 falcon 转150/7圈
         if (vel.r() == 0) {
             this.speed_motor.shutdown();
             this.angle_motor.shutdown();
