@@ -3,7 +3,6 @@ package frc.libzodiac;
 import java.security.InvalidParameterException;
 
 public interface Zensor {
-
     double get();
 
     Zensor reset(double zero);

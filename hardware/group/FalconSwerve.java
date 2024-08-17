@@ -8,18 +8,16 @@ import frc.libzodiac.hardware.MagEncoder;
 import frc.libzodiac.util.Vec2D;
 
 public final class FalconSwerve implements Module, ZmartDash {
+    private static final double SWERVE_RATIO = 150.0 / 7.0;
     public final Falcon speed_motor;
     public final Falcon.Servo angle_motor;
-
-    private MagEncoder encoder;
+    private final MagEncoder encoder;
 
     public FalconSwerve(Falcon speed_motor, Falcon.Servo angle_motor, MagEncoder encoder) {
         this.speed_motor = speed_motor;
         this.angle_motor = angle_motor;
         this.encoder = encoder;
     }
-
-    private static final double SWERVE_RATIO = 150.0 / 7.0;
 
     @Override
     public FalconSwerve init() {

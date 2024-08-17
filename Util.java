@@ -1,7 +1,5 @@
 package frc.libzodiac;
 
-import java.util.function.Function;
-
 import edu.wpi.first.wpilibj.Timer;
 
 /**
@@ -79,24 +77,12 @@ public class Util {
         return mod(rad, Math.PI);
     }
 
-    public static double induct(double angle) {
-        if (angle < 0)
-            return -induct(-angle);
-        final var cos = Math.cos(angle);
-        final var acos = Math.acos(cos);
-        return acos;
-    }
-
     public static double closest(double angle) {
         if (angle < 0)
             return -closest(-angle);
         final var cnt = (int) (angle / (2 * Math.PI));
         final var one = cnt * 2 * Math.PI;
         return angle - one > Math.PI ? one + 2 * Math.PI : one;
-    }
-
-    public static final Function<Double, Double> abs_thre(double thre) {
-        return x -> Math.abs(x) < thre ? 0 : x;
     }
 
     public static boolean approx(double x_1, double x_2, double thre) {
@@ -108,17 +94,6 @@ public class Util {
     }
 
     public static Tuple2<Double, Boolean> solve(double src, double dst) {
-        // var mod_pied = mod_pi(src);
-        // var delta = mod_pi(dst - mod_pied);
-        // boolean inverted = false;
-        // if(Math.abs(delta)>Math.PI/2)
-        // {
-        // mod_pied = mod_pi(mod_pied+Math.PI);
-        // inverted = true;
-        // }
-        // delta = mod_pi(dst - mod_pied);
-        // return new Tuple2<Double,Boolean>(src + delta, inverted);
-
         final var closest = closest(src);
         final var d0 = closest + dst;
         final var d1 = closest + dst - Math.PI;
@@ -130,14 +105,7 @@ public class Util {
         final var min = Math.min(a0, Math.min(a1, a2));
         return min == a0 ? new Tuple2<>(d0, false)
                 : min == a1 ? new Tuple2<>(d1, true)
-                        : new Tuple2<>(d2, true);
-
-        // final var d1 = closest + dst;
-        // final var absdelta = Math.abs(d1 - src);
-        // final var inverted = absdelta >= Math.PI / 2;
-        // final var d2 = (inverted || Math.abs(absdelta - Math.PI) < 1e-3) ? (d1 < src
-        // ? d1 + Math.PI : d1 - Math.PI) : d1;
-        // return new Tuple2<>(d2, inverted);
+                : new Tuple2<>(d2, true);
     }
 
     public static class Tuple2<T0, T1> {
@@ -149,5 +117,4 @@ public class Util {
             this.x1 = x1;
         }
     }
-
 }

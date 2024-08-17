@@ -15,8 +15,6 @@ public interface ZmartDash {
     }
 
     default ZmartDash debug(String key, double value) {
-        // SmartDashboard.putNumber(this.key() + "->" + key + ": ", value);
-        // final var s = String.format("%.3e", value);
         return this.debug(key, Util.printed(value));
     }
 

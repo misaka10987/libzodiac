@@ -1,7 +1,6 @@
 package frc.libzodiac.hardware;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-
 import frc.libzodiac.Util;
 import frc.libzodiac.Zensor;
 import frc.libzodiac.ZmartDash;

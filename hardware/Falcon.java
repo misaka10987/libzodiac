@@ -94,10 +94,7 @@ public class Falcon extends ZMotor implements ZmartDash {
     }
 
     public static final class Servo extends Falcon implements Zervo {
-
         public static final double POSITION_RAW_UNIT = 2 * Math.PI;
-
-        // private double zero = 0;
 
         public Servo(int can_id) {
             super(can_id);
@@ -117,14 +114,7 @@ public class Falcon extends ZMotor implements ZmartDash {
         }
 
         @Override
-        public double get_zero() {
-            // return this.zero;
-            return 0;
-        }
-
-        @Override
         public Servo set_zero(double zero) {
-            // this.zero = zero;
             final var v = zero / POSITION_RAW_UNIT;
             this.motor.setPosition(this.inverted ? -v : v);
             return this;

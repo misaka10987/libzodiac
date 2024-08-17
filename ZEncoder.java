@@ -54,6 +54,4 @@ public abstract class ZEncoder implements ZmartDash {
     public String key() {
         return "ZEncoder(" + this.can_id + ")";
     }
-
-    public abstract ZEncoder clear();
 }

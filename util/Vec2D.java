@@ -1,8 +1,8 @@
 package frc.libzodiac.util;
 
-import java.util.function.Function;
-
 import frc.libzodiac.Util;
+
+import java.util.function.Function;
 
 public class Vec2D {
 
@@ -36,8 +36,6 @@ public class Vec2D {
 
     @Override
     public String toString() {
-        // final var x = String.format("%.3e", this.x);
-        // final var y = String.format("%.3e", this.y);
         return "(" + Util.printed(this.x) + "," + Util.printed(this.y) + ")";
     }
 

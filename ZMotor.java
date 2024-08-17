@@ -9,7 +9,6 @@ import java.util.HashMap;
  * can be controled under a unified generic way.
  */
 public abstract class ZMotor {
-
     /**
      * The PID configuration of this motor.
      */

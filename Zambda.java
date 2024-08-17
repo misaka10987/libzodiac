@@ -20,7 +20,7 @@ public final class Zambda extends ZCommand {
     }
 
     public static Zambda indep(Runnable exec) {
-        return new Zambda(new Subsystem[] {}, exec);
+        return new Zambda(new Subsystem[]{}, exec);
     }
 
     @Override

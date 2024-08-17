@@ -4,8 +4,9 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 
 public final class Axis {
-    private final DoubleSupplier raw_input;
+    public static final Function<Double, Double> QUAD_FILTER = x -> x * x * Math.signum(x);
     public final Function<Double, Double> mapping;
+    private final DoubleSupplier raw_input;
 
     public Axis(DoubleSupplier raw_input) {
         this.raw_input = raw_input;
@@ -17,9 +18,7 @@ public final class Axis {
         this.mapping = mapping;
     }
 
-    public static final Function<Double, Double> QUAD_FILTER = x -> x * x * Math.signum(x);
-
-    public static final Function<Double, Double> thre_filter(double thre) {
+    public static Function<Double, Double> thre_filter(double thre) {
         return x -> Math.abs(x) < thre ? 0 : x;
     }
 

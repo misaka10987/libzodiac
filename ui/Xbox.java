@@ -1,7 +1,7 @@
 package frc.libzodiac.ui;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
 
 public final class Xbox {
     public final int port;

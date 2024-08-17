@@ -1,16 +1,17 @@
 package frc.libzodiac;
 
-import java.util.ArrayDeque;
-
 import edu.wpi.first.wpilibj.Timer;
 import frc.libzodiac.ui.Axis;
 import frc.libzodiac.util.Vec2D;
+
+import java.util.ArrayDeque;
 
 /**
  * A highly implemented class for hopefully all types of swerve control.
  */
 public abstract class Zwerve extends Zubsystem implements ZmartDash {
 
+    private static final double POS_FIX_KP = 1;
     public final Vec2D shape;
     /**
      * Gyro.
@@ -48,11 +49,14 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * </table>
      */
     public final Module[] module;
+    private final ArrayDeque<Vec2D> prev = new ArrayDeque<>();
+    private final Timer last_rot = new Timer();
     public boolean headless = false;
     /**
      * Modifier timed at the output speed of the chassis.
      */
     public double output = 1;
+    private double desired_yaw = 0;
 
     /**
      * Creates a new Zwerve.
@@ -114,17 +118,9 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      */
     protected abstract Zwerve opt_init();
 
-    private ArrayDeque<Vec2D> prev = new ArrayDeque<>();
-
-    private double desired_yaw = 0;
-
-    private static double POS_FIX_KP = 1;
-
-    private Timer last_rot = new Timer();
-
     /**
      * Kinematics part rewritten using vector calculations.
-     * 
+     *
      * @param vel translational velocity, with +x as the head of the bot
      * @param rot rotal velocity, CCW positive
      */
@@ -154,6 +150,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
 
         // if (Math.abs(rot) < 0.01)
         // rot = 0;
+        //todo
 
         this.prev.add(vel);
         var sum = new Vec2D(0, 0);
@@ -189,7 +186,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
 
     /**
      * Enable/disable headless mode.
-     * 
+     *
      * @param status whether to enable headless mode
      */
     public Zwerve headless(boolean status) {
@@ -207,10 +204,6 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
     public Zwerve toggle_headless() {
         this.headless = !this.headless;
         return this;
-    }
-
-    public ZCommand drive_forward() {
-        return new Zambda(this, () -> this.go(new Vec2D(0.1, 0), 0));
     }
 
     public ZCommand drive(Axis x, Axis y, Axis rot) {

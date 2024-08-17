@@ -7,7 +7,6 @@ import frc.libzodiac.ZMotor;
 import frc.libzodiac.Zervo;
 
 public class Pro775 extends ZMotor {
-
     public final int can_id;
 
     protected TalonSRX motor;
@@ -69,7 +68,6 @@ public class Pro775 extends ZMotor {
     }
 
     public static class Servo extends Pro775 implements Zervo {
-
         public double zero = 0;
 
         public Servo(int can_id) {
@@ -85,11 +83,6 @@ public class Pro775 extends ZMotor {
         public Zervo set_zero(double zero) {
             this.zero = zero;
             return this;
-        }
-
-        @Override
-        public double get_zero() {
-            return this.zero;
         }
 
         @Override
@@ -113,6 +106,5 @@ public class Pro775 extends ZMotor {
         public Pro775 motor() {
             return this;
         }
-
     }
 }
