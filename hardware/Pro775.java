@@ -43,9 +43,13 @@ public class Pro775 extends ZMotor {
     }
 
     @Override
-    public Pro775 stop() {
-        this.motor.setNeutralMode(NeutralMode.Brake);
-        this.motor.neutralOutput();
+    public Pro775 stop(boolean stop) {
+        if (stop) {
+            this.motor.setNeutralMode(NeutralMode.Brake);
+            this.motor.neutralOutput();
+        } else {
+            this.motor.setNeutralMode(NeutralMode.Coast);
+        }
         return this;
     }
 

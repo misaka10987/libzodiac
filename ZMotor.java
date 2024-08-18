@@ -67,7 +67,7 @@ public abstract class ZMotor {
      * Stop the motor.
      * Using brake mode if it is available.
      */
-    public abstract ZMotor stop();
+    public abstract ZMotor stop(boolean stop);
 
     /**
      * Perform actions with the specified motion profile.

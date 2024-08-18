@@ -1,10 +1,7 @@
 package frc.libzodiac.hardware;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.controls.StaticBrake;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.libzodiac.ZMotor;
 import frc.libzodiac.Zervo;
@@ -47,8 +44,12 @@ public class Falcon extends ZMotor implements ZmartDash {
     }
 
     @Override
-    public Falcon stop() {
-        this.motor.setControl(new StaticBrake());
+    public Falcon stop(boolean stop) {
+        if (stop) {
+            this.motor.setControl(new StaticBrake());
+        } else {
+            this.motor.setControl(new CoastOut());
+        }
         return this;
     }
 

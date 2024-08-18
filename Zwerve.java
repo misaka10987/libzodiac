@@ -148,10 +148,6 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
             rot += error * POS_FIX_KP;
         }
 
-        // if (Math.abs(rot) < 0.01)
-        // rot = 0;
-        //todo
-
         this.prev.add(vel);
         var sum = new Vec2D(0, 0);
         for (final var i : this.prev)
