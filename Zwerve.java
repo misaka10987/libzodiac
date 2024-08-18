@@ -10,7 +10,6 @@ import java.util.ArrayDeque;
  * A highly implemented class for hopefully all types of swerve control.
  */
 public abstract class Zwerve extends Zubsystem implements ZmartDash {
-
     private static final double POS_FIX_KP = 1;
     public final Vec2D shape;
     /**
@@ -52,6 +51,8 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
     private final ArrayDeque<Vec2D> prev = new ArrayDeque<>();
     private final Timer last_rot = new Timer();
     public boolean headless = false;
+    public double headless_zero = 0;
+
     /**
      * Modifier timed at the output speed of the chassis.
      */
@@ -88,7 +89,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * Get the absolute current direction of the robot.j
      */
     public double dir_curr() {
-        return this.gyro.get("yaw");
+        return this.gyro.get("yaw") - this.headless_zero;
     }
 
     /**

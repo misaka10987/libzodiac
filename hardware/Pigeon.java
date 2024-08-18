@@ -11,13 +11,9 @@ import java.util.HashMap;
 public class Pigeon implements Zensor, ZmartDash {
     public final int can_id;
     protected Pigeon2 pigeon = null;
-    protected HashMap<String, Double> zero = new HashMap<>();
 
     public Pigeon(int can_id) {
         this.can_id = can_id;
-        this.zero.put("yaw", 0.0);
-        this.zero.put("pitch", 0.0);
-        this.zero.put("roll", 0.0);
         this.init();
     }
 
@@ -32,11 +28,6 @@ public class Pigeon implements Zensor, ZmartDash {
     }
 
     @Override
-    public Pigeon reset(double zero) {
-        return this.reset("yaw", zero);
-    }
-
-    @Override
     public double get(String value) {
         return switch (value.trim().toLowerCase()) {
             case "yaw" -> Util.rad(this.pigeon.getYaw().getValue());
@@ -44,12 +35,6 @@ public class Pigeon implements Zensor, ZmartDash {
             case "roll" -> Util.rad(this.pigeon.getRoll().getValue());
             default -> throw new InvalidParameterException(value);
         };
-    }
-
-    @Override
-    public Pigeon reset(String value, double zero) {
-        this.zero.put(value, zero);
-        return this;
     }
 
     @Override
