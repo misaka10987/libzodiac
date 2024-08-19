@@ -15,8 +15,9 @@ public final class Zambda extends ZCommand {
 
     public Zambda(Subsystem[] req, Runnable exec) {
         this.exec = exec;
-        for (final var i : req)
+        for (final var i : req) {
             this.require(i);
+        }
     }
 
     public static Zambda indep(Runnable exec) {

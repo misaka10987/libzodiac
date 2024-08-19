@@ -65,5 +65,4 @@ public final class Axis {
     public Button into() {
         return new Button(() -> Math.abs(this.raw_input.getAsDouble()) >= 0.5);
     }
-
 }

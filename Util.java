@@ -27,8 +27,9 @@ public class Util {
     }
 
     public static double round(double value, int places) {
-        if (places < 0)
+        if (places < 0) {
             throw new IllegalArgumentException();
+        }
         long factor = (long) Math.pow(10, places);
         value = value * factor;
         long tmp = Math.round(value);
@@ -37,16 +38,17 @@ public class Util {
 
     public static String printed(double value) {
         final var x = Math.abs(value);
-        if (x < 1e-6)
+        if (x < 1e-6) {
             return "0";
-        else if (x < 1e-2)
+        } else if (x < 1e-2) {
             return String.format("%.3e", value);
-        else if (x < 1)
+        } else if (x < 1) {
             return String.format("%.3f", value);
-        else if (x < 1000)
+        } else if (x < 1000) {
             return String.format("%.1f", value);
-        else
+        } else {
             return String.format("%.3e", value);
+        }
     }
 
     /**
@@ -60,8 +62,9 @@ public class Util {
      */
     public static double mod(Double num, double mod) {
         // I believe there are still some bugs.
-        if (num.isInfinite() || num.isNaN())
+        if (num.isInfinite() || num.isNaN()) {
             return Double.NaN;
+        }
         if (num < 0) {
             return -mod(-num, mod);
         }
@@ -78,8 +81,9 @@ public class Util {
     }
 
     public static double closest(double angle) {
-        if (angle < 0)
+        if (angle < 0) {
             return -closest(-angle);
+        }
         final var cnt = (int) (angle / (2 * Math.PI));
         final var one = cnt * 2 * Math.PI;
         return angle - one > Math.PI ? one + 2 * Math.PI : one;
@@ -103,9 +107,7 @@ public class Util {
         final var a2 = Math.abs(src - d2);
 
         final var min = Math.min(a0, Math.min(a1, a2));
-        return min == a0 ? new Tuple2<>(d0, false)
-                : min == a1 ? new Tuple2<>(d1, true)
-                : new Tuple2<>(d2, true);
+        return min == a0 ? new Tuple2<>(d0, false) : min == a1 ? new Tuple2<>(d1, true) : new Tuple2<>(d2, true);
     }
 
     public static class Tuple2<T0, T1> {

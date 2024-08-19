@@ -96,8 +96,9 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * Get the direction adjustment applied under headless mode.
      */
     private double dir_fix() {
-        if (this.yaw == null)
+        if (this.yaw == null) {
             return 0;
+        }
         return this.headless ? -this.dir_curr() : 0;
     }
 
@@ -151,8 +152,9 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
 
         this.prev.add(vel);
         var sum = new Vec2D(0, 0);
-        for (final var i : this.prev)
+        for (final var i : this.prev) {
             sum = sum.add(i);
+        }
         final var vt = sum.div(this.prev.size()).rot(this.dir_fix());
 
         this.prev.pop();
@@ -160,16 +162,13 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         this.debug("rotation", rot);
         final var l = this.shape.x / 2;
         final var w = this.shape.y / 2;
-        Vec2D[] v = {
-                new Vec2D(l, w),
-                new Vec2D(-l, w),
-                new Vec2D(-l, -w),
-                new Vec2D(l, -w),
-        };
-        for (var i = 0; i < 4; i++)
+        Vec2D[] v = { new Vec2D(l, w), new Vec2D(-l, w), new Vec2D(-l, -w), new Vec2D(l, -w) };
+        for (var i = 0; i < 4; i++) {
             v[i] = v[i].rot(Math.PI / 2).with_r(rot).add(vt);
-        for (int i = 0; i < 4; i++)
+        }
+        for (int i = 0; i < 4; i++) {
             this.module[i].go(v[i].mul(this.output));
+        }
         return this;
     }
 
@@ -216,8 +215,9 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
     }
 
     public Zwerve mod_reset() {
-        for (final var i : this.module)
+        for (final var i : this.module) {
             i.reset();
+        }
         return this;
     }
 

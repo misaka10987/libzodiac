@@ -84,5 +84,4 @@ public final class Xbox {
         this.xbox.setRumble(RumbleType.kBothRumble, 0.5);
         return this;
     }
-
 }
