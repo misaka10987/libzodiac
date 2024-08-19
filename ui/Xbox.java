@@ -13,35 +13,35 @@ public final class Xbox {
     }
 
     public Axis lx() {
-        return new Axis(() -> this.xbox.getLeftX());
+        return new Axis(this.xbox::getLeftX);
     }
 
     public Axis ly() {
-        return new Axis(() -> this.xbox.getLeftY());
+        return new Axis(this.xbox::getLeftY);
     }
 
     public Axis rx() {
-        return new Axis(() -> this.xbox.getRightX());
+        return new Axis(this.xbox::getRightX);
     }
 
     public Axis ry() {
-        return new Axis(() -> this.xbox.getRightY());
+        return new Axis(this.xbox::getRightY);
     }
 
     public Axis lt() {
-        return new Axis(() -> this.xbox.getLeftTriggerAxis());
+        return new Axis(this.xbox::getLeftTriggerAxis);
     }
 
     public Axis rt() {
-        return new Axis(() -> this.xbox.getRightTriggerAxis());
+        return new Axis(this.xbox::getRightTriggerAxis);
     }
 
     public Button lb() {
-        return new Button(() -> this.xbox.getLeftBumper());
+        return new Button(this.xbox::getLeftBumper);
     }
 
     public Button rb() {
-        return new Button(() -> this.xbox.getRightBumper());
+        return new Button(this.xbox::getRightBumper);
     }
 
     public Button up_pov() {
@@ -65,19 +65,19 @@ public final class Xbox {
     }
 
     public Button a() {
-        return new Button(() -> this.xbox.getAButton());
+        return new Button(this.xbox::getAButton);
     }
 
     public Button b() {
-        return new Button(() -> this.xbox.getBButton());
+        return new Button(this.xbox::getBButton);
     }
 
     public Button x() {
-        return new Button(() -> this.xbox.getXButton());
+        return new Button(this.xbox::getXButton);
     }
 
     public Button y() {
-        return new Button(() -> this.xbox.getYButton());
+        return new Button(this.xbox::getYButton);
     }
 
     public Xbox begin_rumble() {

@@ -20,7 +20,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * Swerve modules of a rectangular chassis.
      * <p>
      * Suppose the robot heads the positive x direction,
-     * relationship between indice and positions of modules are as follows:
+     * relationship between indices and positions of modules are as follows:
      * <table>
      * <thead>
      * <tr>
@@ -123,7 +123,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * Kinematics part rewritten using vector calculations.
      *
      * @param vel translational velocity, with +x as the head of the bot
-     * @param rot rotal velocity, CCW positive
+     * @param rot rotate velocity, CCW positive
      */
     public Zwerve go(Vec2D vel, double rot) {
         this.debug("last_rot", this.last_rot.get());

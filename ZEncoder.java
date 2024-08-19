@@ -4,14 +4,13 @@ package frc.libzodiac;
  * A generic encoder.
  */
 public abstract class ZEncoder implements ZmartDash {
-
     /**
      * The CAN ID.
      */
     public final int can_id;
 
     /**
-     * Zero position of this encoder in radians. The adjustion is applied to output automatically by <code>ZEncoder</code>.
+     * Zero position of this encoder in radians. The adjuration is applied to output automatically by <code>ZEncoder</code>.
      */
     public double zero;
 

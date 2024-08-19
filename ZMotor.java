@@ -6,19 +6,17 @@ import java.util.HashMap;
 
 /**
  * Defines a large collection of APIs to operate various motors so that motors
- * can be controled under a unified generic way.
+ * can be controlled under a unified generic way.
  */
 public abstract class ZMotor {
+    /**
+     * Motions profiles pre-defined for future use.
+     */
+    public final HashMap<String, Double> profile = new HashMap<>();
     /**
      * The PID configuration of this motor.
      */
     public PIDProfile pid;
-
-    /**
-     * Motions profiles pre-defined for future use.
-     */
-    public HashMap<String, Double> profile = new HashMap<>();
-
     public boolean inverted = false;
 
     /**

@@ -1,10 +1,9 @@
 package frc.libzodiac;
 
 /**
- * Note: the method Zmotor.go **MUST** be overrided.
+ * Note: the method Zmotor.go **MUST** be overridden.
  */
 public interface Zervo {
-
     /**
      * Configures the zero position of the motor.
      */
@@ -16,7 +15,7 @@ public interface Zervo {
     double get();
 
     /**
-     * Convaries the servo motor and returns a generic motor.
+     * Covariances the servo motor and returns a generic motor.
      */
     ZMotor motor();
 }

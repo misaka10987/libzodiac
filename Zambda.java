@@ -3,7 +3,7 @@ package frc.libzodiac;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /**
- * Allows you to construct wpilib's <code>Command</code> with a lambda.
+ * Allows you to construct wpilib <code>Command</code> with a lambda.
  */
 public final class Zambda extends ZCommand {
     public final Runnable exec;

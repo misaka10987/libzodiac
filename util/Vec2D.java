@@ -5,7 +5,6 @@ import frc.libzodiac.Util;
 import java.util.function.Function;
 
 public class Vec2D {
-
     public final double x;
     public final double y;
 
@@ -118,14 +117,7 @@ public class Vec2D {
         return Polar.from(this);
     }
 
-    public static class Polar {
-        public final double r;
-        public final double theta;
-
-        public Polar(double r, double theta) {
-            this.r = r;
-            this.theta = theta;
-        }
+    public record Polar(double r, double theta) {
 
         public static Polar from(Vec2D v) {
             return new Polar(v.r(), v.theta());
