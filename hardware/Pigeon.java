@@ -4,9 +4,9 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import frc.libzodiac.Util;
 import frc.libzodiac.Zensor;
 import frc.libzodiac.ZmartDash;
+import frc.libzodiac.ui.Axis;
 
 import java.security.InvalidParameterException;
-import java.util.HashMap;
 
 public class Pigeon implements Zensor, ZmartDash {
     public final int can_id;
@@ -20,6 +20,18 @@ public class Pigeon implements Zensor, ZmartDash {
     public Pigeon init() {
         this.pigeon = new Pigeon2(this.can_id);
         return this;
+    }
+
+    public Axis yaw() {
+        return new Axis(() -> this.pigeon.getYaw().refresh().getValue());
+    }
+
+    public Axis pitch() {
+        return new Axis(() -> this.pigeon.getPitch().refresh().getValue());
+    }
+
+    public Axis roll() {
+        return new Axis(() -> this.pigeon.getRoll().refresh().getValue());
     }
 
     @Override

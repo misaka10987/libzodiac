@@ -15,7 +15,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
     /**
      * Gyro.
      */
-    public final Zensor gyro;
+    public final Axis yaw;
     /**
      * Swerve modules of a rectangular chassis.
      * <p>
@@ -63,13 +63,13 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * Creates a new Zwerve.
      *
      * @param modules See <code>Zwerve.module</code>.
-     * @param gyro    The gyro.
+     * @param yaw_gyro The gyroscope axis measuring yaw.
      * @param shape   Shape of the robot, <code>x</code> for length and
      *                <code>y</code> for width.
      */
-    public Zwerve(Module[] modules, Zensor gyro, Vec2D shape) {
+    public Zwerve(Module[] modules,Axis yaw_gyro, Vec2D shape) {
         this.module = modules;
-        this.gyro = gyro;
+        this.yaw = yaw_gyro;
         this.shape = shape;
         final var v = new Vec2D(0, 0);
         this.prev.add(v);
@@ -89,14 +89,14 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * Get the absolute current direction of the robot.j
      */
     public double dir_curr() {
-        return this.gyro.get("yaw") - this.headless_zero;
+        return this.yaw.get() - this.headless_zero;
     }
 
     /**
      * Get the direction adjustment applied under headless mode.
      */
     private double dir_fix() {
-        if (this.gyro == null)
+        if (this.yaw == null)
             return 0;
         return this.headless ? -this.dir_curr() : 0;
     }
@@ -109,7 +109,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
             i.init();
         }
         this.opt_init();
-        this.desired_yaw = this.gyro.get("yaw");
+        this.desired_yaw = this.yaw.get();
         this.last_rot.start();
         return this;
     }
@@ -129,7 +129,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         this.debug("last_rot", this.last_rot.get());
 
         // direction adjustment
-        final var curr_yaw = this.gyro.get("yaw");
+        final var curr_yaw = this.yaw.get();
         final var good = !Util.approx(this.desired_yaw, curr_yaw);
         this.debug("good", good);
         this.debug("desired", this.desired_yaw);
@@ -177,7 +177,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
     public Zwerve update() {
         this.debug("headless", this.headless);
         this.debug("dir_fix", this.dir_fix());
-        this.debug("yaw", this.gyro.get("yaw"));
+        this.debug("yaw", this.yaw.get());
         return this;
     }
 
