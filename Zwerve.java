@@ -62,12 +62,12 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
     /**
      * Creates a new Zwerve.
      *
-     * @param modules See <code>Zwerve.module</code>.
+     * @param modules  See <code>Zwerve.module</code>.
      * @param yaw_gyro The gyroscope axis measuring yaw.
-     * @param shape   Shape of the robot, <code>x</code> for length and
-     *                <code>y</code> for width.
+     * @param shape    Shape of the robot, <code>x</code> for length and
+     *                 <code>y</code> for width.
      */
-    public Zwerve(Module[] modules,Axis yaw_gyro, Vec2D shape) {
+    public Zwerve(Module[] modules, Axis yaw_gyro, Vec2D shape) {
         this.module = modules;
         this.yaw = yaw_gyro;
         this.shape = shape;
