@@ -23,15 +23,15 @@ public class Pigeon implements Zensor, ZmartDash {
     }
 
     public Axis yaw() {
-        return new Axis(() -> this.pigeon.getYaw().refresh().getValue());
+        return new Axis(() -> Util.rad(this.pigeon.getYaw().refresh().getValue()));
     }
 
     public Axis pitch() {
-        return new Axis(() -> this.pigeon.getPitch().refresh().getValue());
+        return new Axis(() -> Util.rad(this.pigeon.getPitch().refresh().getValue()));
     }
 
     public Axis roll() {
-        return new Axis(() -> this.pigeon.getRoll().refresh().getValue());
+        return new Axis(() -> Util.rad(this.pigeon.getRoll().refresh().getValue()));
     }
 
     @Override
