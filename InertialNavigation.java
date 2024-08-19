@@ -20,6 +20,7 @@ public class InertialNavigation extends Zubsystem {
 
     public InertialNavigation init() {
         this.timer.start();
+        this.setZero();
         return this;
     }
 
@@ -52,6 +53,10 @@ public class InertialNavigation extends Zubsystem {
 
     public Vec2D getSpeed() {
         return this.speed;
+    }
+
+    public double getYaw() {
+        return this.gyro.getYaw() - this.zero;
     }
 
     public interface Gyro {
