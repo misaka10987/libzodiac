@@ -129,7 +129,6 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
     public Zwerve go(Vec2D vel, double rot) {
         // direction adjustment
         final var curr_yaw = this.yaw.get();
-        final var good = !Util.approx(this.desired_yaw, curr_yaw);
         this.debug("desired", this.desired_yaw);
         if (rot != 0) {
             this.last_rot.reset();
@@ -196,10 +195,10 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         return this;
     }
 
-    public ZCommand drive(Axis x, Axis y, Axis rot) {
+    public ZCommand drive(Axis x, Axis y, Axis rot, boolean useLimelight, double limelightForwardSpeed, double limelightRotateSpeed) {
         return new Zambda(this, () -> {
-            final var vel = new Vec2D(x.get(), y.get());
-            this.go(vel, rot.get());
+            final var vel = new Vec2D(useLimelight ? x.get() : limelightForwardSpeed, y.get());
+            this.go(vel, useLimelight ? limelightRotateSpeed : rot.get());
         });
     }
 

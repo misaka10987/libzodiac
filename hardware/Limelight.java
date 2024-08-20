@@ -20,13 +20,24 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Limelight implements ZmartDash {
+    private static final double LIMELIGHT_ROT_KP = 2;
+    private static final double LIMELIGHT_FORWARD_KP = .1;
+
+    public static double getTargetRotateSpeed() {
+        return -Math.toRadians(LimelightHelpers.getTX("limelight")) * LIMELIGHT_ROT_KP;
+    }
+
+    public static double getTargetForwardSpeed() {
+        return -Math.toRadians(LimelightHelpers.getTY("limelight")) * LIMELIGHT_FORWARD_KP;
+    }
+
     @Override
     public String key() {
         return "Limelight";
     }
 
     // Copied from https://github.com/LimelightVision/limelight-examples/blob/main/java-wpilib/swerve-aim-and-range/src/main/java/frc/robot/LimelightHelpers.java
-    public static class LimelightHelpers {
+    private static class LimelightHelpers {
         private static final Map<String, DoubleArrayEntry> doubleArrayEntries = new ConcurrentHashMap<>();
         /**
          * Print JSON Parse time to the console in milliseconds
