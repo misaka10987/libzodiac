@@ -127,12 +127,9 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * @param rot rotate velocity, CCW positive
      */
     public Zwerve go(Vec2D vel, double rot) {
-        this.debug("last_rot", this.last_rot.get());
-
         // direction adjustment
         final var curr_yaw = this.yaw.get();
         final var good = !Util.approx(this.desired_yaw, curr_yaw);
-        this.debug("good", good);
         this.debug("desired", this.desired_yaw);
         if (rot != 0) {
             this.last_rot.reset();
@@ -144,9 +141,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         }
 
         if (!Util.approx(this.desired_yaw, curr_yaw, 0.05)) {
-            this.debug("fix", "trying to fix");
             final var error = this.desired_yaw - curr_yaw;
-            this.debug("yaw_error", error);
             rot += error * POS_FIX_KP;
         }
 
@@ -175,7 +170,6 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
     @Override
     public Zwerve update() {
         this.debug("headless", this.headless);
-        this.debug("dir_fix", this.dir_fix());
         this.debug("yaw", this.yaw.get());
         return this;
     }

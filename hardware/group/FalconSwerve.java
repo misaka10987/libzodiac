@@ -24,7 +24,6 @@ public final class FalconSwerve implements Module, ZmartDash {
         this.speed_motor.init();
         this.angle_motor.init();
         this.encoder.init();
-        this.debug("encoder_zero", this.encoder.zero);
         return this;
     }
 

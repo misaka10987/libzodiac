@@ -23,7 +23,6 @@ public final class MagEncoder implements ZmartDash {
 
     public MagEncoder set_zero(double zero) {
         this.zero = zero;
-        this.debug("get", this.get());
         return this;
     }
 
