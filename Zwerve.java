@@ -10,8 +10,8 @@ import java.util.ArrayDeque;
  * A highly implemented class for hopefully all types of swerve control.
  */
 public abstract class Zwerve extends Zubsystem implements ZmartDash {
-    private static final double POS_FIX_KP = 1;
-    private static final double ROTATION_OUTPUT = 1;
+    private static final double POS_FIX_KP = 0.2;
+    private static final double ROTATION_OUTPUT = 2;
     public final Vec2D shape;
     /**
      * Gyro.
