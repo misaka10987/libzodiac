@@ -3,6 +3,7 @@ package frc.libzodiac;
 import edu.wpi.first.wpilibj.Timer;
 import frc.libzodiac.ui.Axis;
 import frc.libzodiac.util.Vec2D;
+import frc.robot.subsystems.Chassis;
 
 import java.util.ArrayDeque;
 
@@ -127,6 +128,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * @param rot rotate velocity, CCW positive
      */
     public Zwerve go(Vec2D vel, double rot) {
+        this.debug("pos", ""+Chassis.inav.getPosition());
         // direction adjustment
         final var curr_yaw = this.yaw.get();
         this.debug("desired", this.desired_yaw);
@@ -197,7 +199,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
 
     public ZCommand drive(Axis x, Axis y, Axis rot, boolean useLimelight, double limelightForwardSpeed, double limelightRotateSpeed) {
         return new Zambda(this, () -> {
-            final var vel = new Vec2D(useLimelight ? x.get() : limelightForwardSpeed, y.get());
+            final var vel = new Vec2D(useLimelight ? limelightForwardSpeed : x.get(), y.get());
             this.go(vel, useLimelight ? limelightRotateSpeed : rot.get());
         });
     }
