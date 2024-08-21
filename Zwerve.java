@@ -3,7 +3,6 @@ package frc.libzodiac;
 import edu.wpi.first.wpilibj.Timer;
 import frc.libzodiac.ui.Axis;
 import frc.libzodiac.util.Vec2D;
-import frc.robot.subsystems.Chassis;
 
 import java.util.ArrayDeque;
 
@@ -12,6 +11,7 @@ import java.util.ArrayDeque;
  */
 public abstract class Zwerve extends Zubsystem implements ZmartDash {
     private static final double POS_FIX_KP = 1;
+    private static final double ROTATION_OUTPUT = 1;
     public final Vec2D shape;
     /**
      * Gyro.
@@ -128,7 +128,6 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
      * @param rot rotate velocity, CCW positive
      */
     public Zwerve go(Vec2D vel, double rot) {
-        this.debug("pos", ""+Chassis.inav.getPosition());
         // direction adjustment
         final var curr_yaw = this.yaw.get();
         this.debug("desired", this.desired_yaw);
@@ -160,7 +159,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         final var w = this.shape.y / 2;
         Vec2D[] v = { new Vec2D(l, w), new Vec2D(-l, w), new Vec2D(-l, -w), new Vec2D(l, -w) };
         for (var i = 0; i < 4; i++) {
-            v[i] = v[i].rot(Math.PI / 2).with_r(rot).add(vt);
+            v[i] = v[i].rot(Math.PI / 2).with_r(rot*ROTATION_OUTPUT).add(vt);
         }
         for (int i = 0; i < 4; i++) {
             this.module[i].go(v[i].mul(this.output));

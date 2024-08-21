@@ -63,6 +63,6 @@ public class Pigeon implements Gyro, Zensor, ZmartDash {
 
     @Override
     public Vec2D getAcceleration() {
-        return new Vec2D(this.pigeon.getAccelerationX().refresh().getValue(), this.pigeon.getAccelerationY().refresh().getValue());
+        return new Vec2D(this.pigeon.getAccelerationX().refresh().getValue()-this.pigeon.getGravityVectorX().refresh().getValue(), this.pigeon.getAccelerationY().refresh().getValue()-this.pigeon.getGravityVectorY().refresh().getValue());
     }
 }
