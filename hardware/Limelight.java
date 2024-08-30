@@ -36,7 +36,7 @@ public class Limelight implements ZmartDash {
         return "Limelight";
     }
 
-    // Copied from https://github.com/LimelightVision/limelight-examples/blob/main/java-wpilib/swerve-aim-and-range/src/main/java/frc/robot/LimelightHelpers.java
+    // Copied from https://github.com/LimelightVision/limelightlib-wpijava/blob/main/LimelightHelpers.java
     private static class LimelightHelpers {
         private static final Map<String, DoubleArrayEntry> doubleArrayEntries = new ConcurrentHashMap<>();
         /**

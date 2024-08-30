@@ -11,7 +11,9 @@ import java.util.ArrayDeque;
  */
 public abstract class Zwerve extends Zubsystem implements ZmartDash {
     private static final double POS_FIX_KP = 0.2;
-    private static final double ROTATION_OUTPUT = 2;
+    private static final double ROTATION_OUTPUT = 1;
+    private static final double ROTATION_OUTPUT_SLOW = 0.5;
+    private static final double ROTATION_OUTPUT_FAST = 2;
     public final Vec2D shape;
     /**
      * Gyro.
@@ -136,7 +138,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
             this.desired_yaw = curr_yaw;
         }
 
-        if (this.last_rot.get() < 0.5) {
+        if (this.last_rot.get() < 0.2) {
             this.desired_yaw = curr_yaw;
         }
 
@@ -145,7 +147,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
             rot += error * POS_FIX_KP;
         }
 
-        this.prev.add(vel);
+        this.prev.add(vel.rot(Math.PI));
         var sum = new Vec2D(0, 0);
         for (final var i : this.prev) {
             sum = sum.add(i);
@@ -159,7 +161,7 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         final var w = this.shape.y / 2;
         Vec2D[] v = { new Vec2D(l, w), new Vec2D(-l, w), new Vec2D(-l, -w), new Vec2D(l, -w) };
         for (var i = 0; i < 4; i++) {
-            v[i] = v[i].rot(Math.PI / 2).with_r(rot*ROTATION_OUTPUT).add(vt);
+            v[i] = v[i].rot(Math.PI / 2).with_r(rot * ROTATION_OUTPUT).add(vt);
         }
         for (int i = 0; i < 4; i++) {
             this.module[i].go(v[i].mul(this.output));
@@ -196,10 +198,10 @@ public abstract class Zwerve extends Zubsystem implements ZmartDash {
         return this;
     }
 
-    public ZCommand drive(Axis x, Axis y, Axis rot, boolean useLimelight, double limelightForwardSpeed, double limelightRotateSpeed) {
+    public ZCommand drive(Axis x, Axis y, Axis rot) {
         return new Zambda(this, () -> {
-            final var vel = new Vec2D(useLimelight ? limelightForwardSpeed : x.get(), y.get());
-            this.go(vel, useLimelight ? limelightRotateSpeed : rot.get());
+            final var vel = new Vec2D(x.get(), y.get());
+            this.go(vel, rot.get());
         });
     }
 

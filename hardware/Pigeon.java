@@ -1,16 +1,14 @@
 package frc.libzodiac.hardware;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import frc.libzodiac.InertialNavigation.Gyro;
 import frc.libzodiac.Util;
 import frc.libzodiac.Zensor;
 import frc.libzodiac.ZmartDash;
 import frc.libzodiac.ui.Axis;
-import frc.libzodiac.util.Vec2D;
 
 import java.security.InvalidParameterException;
 
-public class Pigeon implements Gyro, Zensor, ZmartDash {
+public class Pigeon implements Zensor, ZmartDash {
     public final int can_id;
     protected Pigeon2 pigeon = null;
 
@@ -54,15 +52,5 @@ public class Pigeon implements Gyro, Zensor, ZmartDash {
     @Override
     public String key() {
         return "Pigeon(" + this.can_id + ")";
-    }
-
-    @Override
-    public double getYaw() {
-        return this.get();
-    }
-
-    @Override
-    public Vec2D getAcceleration() {
-        return new Vec2D(this.pigeon.getAccelerationX().refresh().getValue()-this.pigeon.getGravityVectorX().refresh().getValue(), this.pigeon.getAccelerationY().refresh().getValue()-this.pigeon.getGravityVectorY().refresh().getValue());
     }
 }
